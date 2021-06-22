@@ -1,0 +1,132 @@
+<app-loader *ngIf="loading"></app-loader>
+<div class="full-page">
+    <div class="property-details-body">
+        <div class="flex-1">
+            <div class="flex-1-inner-div">
+                <div class="d-flex" style="align-items: center; margin-bottom: 30px;">
+                    <h2 [routerLink]="['/main/properties']"><i class="fa fa fa-arrow-circle-o-left mr-2 cursor-pointer"></i></h2>
+                    <p class="mt-2">Go back</p>
+                </div>
+                <div class="top-details">
+                    <div>
+                        <h3>{{propertyDetails?.PropertyTitle}}</h3>
+                        <!-- <div class="utilities">
+                            <p class="mr-2"><img src="../../../assets/images/bed.png" height="15px" class="mr-1 mb-1">4 Bedrooms</p>
+                            <p class="mr-2"><i class="fa fa-bath mr-1"></i>6 Baths</p>
+                            <p class="mr-2"><img src="../../../assets/images/toilet.png" height="15px" class="mr-1 mb-1">8 Toilets</p>
+                        </div> -->
+                        <p>{{propertyDetails?.HouseTypeId | titlecase}}</p>
+                    </div>
+                    <h5 class="dropdown-toggle" type="button" data-toggle="dropdown"><i class="fa fa-ellipsis-v"></i></h5>
+                    <ul class="dropdown-menu" style="padding:20px">
+                        <li class="cursor-pointer">Delete</li>
+                        <hr>
+                        <li class="cursor-pointer text-success" (click)="approveForDueDilligence()">Proceed</li>
+                        <hr>
+                        <li class="cursor-pointer text-danger" (click)="rejectProperty()">Decline</li>
+                    </ul>
+                </div>
+                
+                <p class="completion-status">{{propertyDetails?.LevelOfHouseCompleted}} Completed</p>
+                
+                <div class="info-document-header">
+                    <h5 class="mr-4">INFO</h5>
+                    <h5>DOCUMENTS</h5>
+                </div>
+
+                <div class="details-card">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="info">
+                                <p>Estimated Date of Completion</p>
+                                <h6>{{truncateDate(propertyDetails?.UncompletedHouse_EstimatedDate)}}</h6>
+                            </div>                            
+                        </div>
+                        <div class="col-6">
+                            <div class="info">
+                                <p>Location of Property</p>
+                                <h6>{{propertyDetails?.Address}}</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-bottom: 20px; margin-top: 20px;">
+                        <div class="col-6">
+                            <div class="info">
+                                <p>Email</p>
+                                <h6>{{propertyDetails?.CreatedBy}}</h6>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="info">
+                                <p>Estimated Price</p>
+                                <h6>{{propertyDetails?.Currency}}{{propertyDetails?.CostOfHouse}}</h6>    
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="amenities-div">
+                    <p><i class="fa fa-user mr-2"></i> Garage/Parking Lot</p>
+                    <p><i class="fa fa-user mr-2"></i> Public Water/Sewer</p>
+                </div>
+
+                <div class="amenities-div">
+                    <p><i class="fa fa-user mr-2"></i> Central Park</p>
+                    <p><i class="fa fa-user mr-2"></i> Central Location</p>
+                </div>
+
+                <div class="action-button-div">
+                    <p class="proceed cursor-pointer" (click)="approveForDueDilligence()">PROCEED FOR DUE DILIGENCE <i class="fa fa-thumbs-up"></i></p>
+                    <p class="decline cursor-pointer" (click)="rejectProperty()">DECLINE <i class="fa fa-thumbs-down"></i></p>
+                </div>
+            </div>
+        </div>
+
+        <!---->
+        <div class="flex-2">
+            <div style="width:100%; border-radius: 20px; overflow: hidden;">
+                <img [src]="propertyImages[currentImageIndex]" width="100%">
+            </div>
+
+            <div>
+                <div class="row" style="margin-top: 30px;">
+                    <div class="col-4">
+                        <div style="width:100%; border-radius: 10px; overflow: hidden;">
+                            <img [src]="propertyImages[0]" width="100%">
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div style="width:100%; border-radius: 10px; overflow: hidden;">
+                            <img [src]="propertyImages[1]" width="100%">
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div style="width:100%; border-radius: 10px; overflow: hidden;">
+                            <img [src]="propertyImages[2]" width="100%">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        
+    </div>
+
+
+    
+
+
+
+    <div class="bottom-footer">
+        <div class="flex-1">
+            <p>Copyright 2021</p>
+            <div>
+                <p>Powered By Sterling Alternative Finance <br>All rights reserved</p>
+            </div>
+        </div>   
+        <div class="flex-2">
+            <img src="../../../assets/images/alt_finance.png" height="30px" class="mr-2">
+            <img src="../../../assets/images/nifi.png" height="30px">
+        </div>         
+    </div>
+</div>

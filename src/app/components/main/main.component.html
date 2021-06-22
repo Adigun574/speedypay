@@ -1,0 +1,27 @@
+<div class="users-body">
+    <div class="top-strip">
+        <div class="logo-div">
+            <img src="../../../assets/images/AltHomeLogo_1.png" height="60px">
+        </div>
+        <div class="tab-text">
+            <p class="tab-title" [ngClass]="{'active-tab-title': currentUrl == '/main/overview'}" [routerLink]="['/main/overview']">Overview</p>
+            <p class="tab-title" [ngClass]="{'active-tab-title': currentUrl == '/main/properties'}" [routerLink]="['/main/properties']">Property Listing</p>
+            <p class="tab-title" [ngClass]="{'active-tab-title': currentUrl == '/main/settings'}" [routerLink]="['/main/settings']">Settings</p>
+        </div>
+        <div class="profile dropdow">
+            <div class="avatar-div">
+                <img src="../../../assets/images/avatar.png" height="60px">
+            </div>
+            <div class="name-pos">
+                <p class="name">John Doe</p>
+                <p class="pos">NIB Supervisor</p>
+            </div>
+            <h3 class="dropdown-toggle" type="button" data-toggle="dropdown"><i class="fa fa-angle-dow"></i></h3>
+            <ul class="dropdown-menu" style="padding:20px">
+                <li (click)="logout()" class="cursor-pointer">Logout</li>
+            </ul>
+        </div>        
+    </div>
+
+    <router-outlet></router-outlet>
+</div>

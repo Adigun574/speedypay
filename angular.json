@@ -123,6 +123,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "nib-officer"
+    }
+  },
+  "defaultProject": "nib-officer",
+  "cli": {
+    "analytics": "6a04d701-2af0-4738-b15e-86b1a9c63c78"
+  }
 }
