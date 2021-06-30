@@ -1,6 +1,6 @@
 import { Injectable, OnDestroy, Inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, Subscription, throwError } from 'rxjs';
 import { map, tap, delay, finalize } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
@@ -43,7 +43,7 @@ export class AuthService implements OnDestroy {
       .post<LoginResult>(`${this.apiUrl}AdminAuthentication/AdminAuthentication`, { username, password })
       .pipe(
         map((x) => {
-          console.log(x)
+          // console.log(x)
           this._user.next({
             username: x.userName,
             role: x.role,
@@ -83,16 +83,16 @@ export class AuthService implements OnDestroy {
   }
 
   refreshToken() {
-    const refreshToken = localStorage.getItem('refresh_token');
-    console.log(refreshToken)
+    const refreshToken = localStorage.getItem('nib_officer_refresh_token');
+    // console.log(refreshToken)
     if (!refreshToken) {
       this.clearLocalStorage();
       return of(null);
     }
 
-    let auth_token = localStorage.getItem('access_token')
+    let auth_token = localStorage.getItem('nib_officer_access_token')
 
-    console.log(auth_token)
+    // console.log(auth_token)
 
     let headers = new HttpHeaders({
       'Content-Type': 'application/json',
@@ -100,55 +100,64 @@ export class AuthService implements OnDestroy {
     })
     let opts = {headers:headers}
 
-    return this.http
+    // return this.http
+    this.http
       .post<LoginResult>(`${this.apiUrl}Authentication/RefreshToken`, { refreshToken }, opts)
       .pipe(
         map((x) => {
           console.log(x)
-          console.log('refreshing token 2')
-          localStorage.setItem('access_token', x.accessToken);
-          localStorage.setItem('refresh_token', x.refreshToken);
+          // console.log('refreshing token 2')
+          localStorage.setItem('nib_officer_access_token', x.accessToken);
+          localStorage.setItem('nib_officer_refresh_token', x.refreshToken);
           // this.setLocalStorage(x)
           this.startTokenTimer();
           return x;
         })
+      )
+      .subscribe(v => {}, (err: HttpErrorResponse) => {
+        //hand error here
+        console.log(err)
+        this.router.navigateByUrl('/')
+        }
       );
+      ;
   }
 
   setLocalStorage(x: LoginResult) {
-    localStorage.setItem('altHomeUser', JSON.stringify(x))
-    localStorage.setItem('refresh_token', x.refreshToken)
-    localStorage.setItem('access_token', x.accessToken)
+    localStorage.setItem('nib_officer_altHomeUser', JSON.stringify(x))
+    localStorage.setItem('nib_officer_refresh_token', x.refreshToken)
+    localStorage.setItem('nib_officer_access_token', x.accessToken)
   }
 
   clearLocalStorage() {
-    localStorage.removeItem('altHomeUser')
-    localStorage.removeItem('refresh_token')
-    localStorage.removeItem('access_token')
+    localStorage.removeItem('nib_officer_altHomeUser')
+    localStorage.removeItem('nib_officer_refresh_token')
+    localStorage.removeItem('nib_officer_access_token')
     localStorage.setItem('logout-event', 'logout' + Math.random());
   
   }
 
 
   private getTokenRemainingTime() {
-    const accessToken = JSON.parse(localStorage.getItem('altHomeUser')).accessToken;
+    const accessToken = JSON.parse(localStorage.getItem('nib_officer_altHomeUser')).accessToken;
     if (!accessToken) {
       return 0;
     }
     const jwtToken = JSON.parse(atob(accessToken.split('.')[1]));
     const expires = new Date(jwtToken.exp * 1000);
-    console.log(expires)
-    console.log(expires.getTime() - Date.now())
+    // console.log(expires)
+    // console.log(expires.getTime() - Date.now())
     return expires.getTime() - Date.now();
-    // return 10000
+    // return 30000
   }
 
-  private startTokenTimer() {
+  startTokenTimer() {
     const timeout = this.getTokenRemainingTime();
     this.timer = of(true)
       .pipe(
         delay(timeout),
-        tap(() => this.refreshToken().subscribe())
+        // tap(() => this.refreshToken().subscribe())
+        tap(() => this.refreshToken())
       )
       .subscribe();
   }

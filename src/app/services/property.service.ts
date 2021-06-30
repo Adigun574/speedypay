@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment';
 })
 export class PropertyService {
 
-  auth_token = localStorage.getItem('access_token')
+  auth_token = localStorage.getItem('nib_officer_access_token')
 
   headers = new HttpHeaders({
     'Content-Type': 'application/json',
@@ -41,6 +41,10 @@ export class PropertyService {
 
   rejectProperty(obj){
     return this.httpClient.post(`${environment.apiUrl}Approval/Rejectproperty`, obj, this.opts)
+  }
+
+  deleteProperty(obj){
+    return this.httpClient.post(`${environment.apiUrl}SellProperty/deleteproperty`, obj, this.opts)
   }
 
 }

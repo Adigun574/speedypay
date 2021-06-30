@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { PropertyService } from '../../services/property.service';
 import { ExcelService } from '../../services/excel.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-properties',
@@ -19,25 +21,61 @@ export class PropertiesComponent implements OnInit {
 
   properties = []
   filteredProperties = []
+  allProperties = []
   loading:boolean = false
-  pendingApprovalProperties = []
+  // pendingApprovalProperties = []
+  // pendingDueDilligenceProperties = []
+  approveReturnMessage = ''
+  rejectReturnMessage = ''
+  deleteReturnMessage = ''
+
   
 
   constructor(
     private propertyService:PropertyService,
     private router:Router,
-    private excelService:ExcelService
+    private excelService:ExcelService,
+    private modalService:NgbModal
   ) { }
 
   ngOnInit(): void {
     this.getProperties()
-    this.getPendingApprovalProperties()
+    // this.getPendingApprovalProperties()
     this.getPendingDueDilligenceProperties()
   }
 
+  open(content){
+    this.modalService.open(content, {centered:true})
+  }
+
+  dismissModal(){
+    this.modalService.dismissAll()
+  }
+
   getProperties(){
-    this.loading = true
     this.propertyService.getAllProperties().subscribe((data:any)=>{
+      this.allProperties = data
+      console.log(this.allProperties)
+    },
+      err=>{
+        console.log(err)
+        this.loading = false
+      })
+  }
+
+  // getPendingApprovalProperties(){
+  //   this.propertyService.getPendingApprovalProperties().subscribe((data:any)=>{
+  //     console.log(data)
+  //     this.pendingApprovalProperties = data
+  //   },
+  //     err=>{
+  //       console.log(err)
+  //     })
+  // }
+
+  getPendingDueDilligenceProperties(){
+    this.loading = true
+    this.propertyService.getPendingDueDilligenceProperties().subscribe((data:any)=>{
       console.log(data)
       this.properties = data
       this.filteredProperties = [...this.properties]
@@ -49,26 +87,7 @@ export class PropertiesComponent implements OnInit {
       })
   }
 
-  getPendingApprovalProperties(){
-    this.propertyService.getPendingApprovalProperties().subscribe((data:any)=>{
-      console.log(data)
-      this.pendingApprovalProperties = data
-    },
-      err=>{
-        console.log(err)
-      })
-  }
-
-  getPendingDueDilligenceProperties(){
-    this.propertyService.getPendingDueDilligenceProperties().subscribe(data=>{
-      console.log(data)
-    },
-      err=>{
-        console.log(err)
-      })
-  }
-
-  approveForDueDilligence(id){
+  approveForDueDilligence(id, modal){
     let obj = {
       id,
       passedDueDeligence: true,
@@ -77,19 +96,27 @@ export class PropertiesComponent implements OnInit {
       passedDueDate: "2021-06-22T21:12:19.462Z"
     }
     console.log(obj)
-    return
     this.loading = true
-    this.propertyService.approvePropertyForDueDilligence(obj).subscribe(data=>{
+    this.propertyService.approvePropertyForDueDilligence(obj).subscribe((data:any)=>{
       console.log(data)
+      this.getPendingDueDilligenceProperties()
+      this.approveReturnMessage = data?.message
+      this.open(modal)
       this.loading = false
     },
       err=>{
         console.log(err)
         this.loading = false
+        Swal.fire({
+          title: 'Oops!',
+          text: 'Something went wrong',
+          icon: 'error',
+          confirmButtonText: 'Okay'
+        })
       })
   }
 
-  rejectProperty(id){
+  rejectProperty(id, modal){
     let obj = {
       id,
       rejectedDate: "2021-06-22T21:36:39.963Z",
@@ -98,15 +125,48 @@ export class PropertiesComponent implements OnInit {
       rejectedStatus: true
     }
     console.log(obj)
-    return
     this.loading = true
-    this.propertyService.rejectProperty(obj).subscribe(data=>{
+    this.propertyService.rejectProperty(obj).subscribe((data:any)=>{
       console.log(data)
+      this.getPendingDueDilligenceProperties()
+      this.rejectReturnMessage = data?.message
+      this.open(modal)
       this.loading = false
     },
       err=>{
         console.log(err)
         this.loading = false
+        Swal.fire({
+          title: 'Oops!',
+          text: 'Something went wrong',
+          icon: 'error',
+          confirmButtonText: 'Okay'
+        })
+      })
+  }
+
+  deleteProperty(id,modal){
+    let obj = {
+      id
+    }
+    console.log(obj)
+    this.loading = true
+    this.propertyService.deleteProperty(obj).subscribe((data:any)=>{
+      console.log(data)
+      this.getPendingDueDilligenceProperties()
+      this.deleteReturnMessage = data?.message
+      this.open(modal)
+      this.loading = false
+    },
+      err=>{
+        console.log(err)
+        this.loading = false
+        Swal.fire({
+          title: 'Oops!',
+          text: 'Something went wrong',
+          icon: 'error',
+          confirmButtonText: 'Okay'
+        })
       })
   }
 
@@ -136,13 +196,13 @@ export class PropertiesComponent implements OnInit {
       return
     }
     if(this.filterPropertiesValue == 'property'){
-      this.filteredProperties = this.properties.filter(x=>x.PropertyTitle.toLowerCase().includes(this.searchKey.toLowerCase()))
+      this.filteredProperties = this.properties.filter(x=>x.propertyTitle.toLowerCase().includes(this.searchKey.toLowerCase()))
     }
     else if(this.filterPropertiesValue == 'status'){
-      this.filteredProperties = this.properties.filter(x=>x.HouseStatus.toLowerCase().includes(this.searchKey.toLowerCase()))
+      this.filteredProperties = this.properties.filter(x=>x.houseStatus.toLowerCase().includes(this.searchKey.toLowerCase()))
     }
     else{
-      this.filteredProperties = this.properties.filter(x=>x.PropertyTitle.toLowerCase().includes(this.searchKey.toLowerCase()))
+      this.filteredProperties = this.properties.filter(x=>x.propertyTitle.toLowerCase().includes(this.searchKey.toLowerCase()))
     }
   }
 

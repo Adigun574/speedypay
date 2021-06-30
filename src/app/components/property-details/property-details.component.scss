@@ -4,6 +4,7 @@
 .property-details-body {
   display: flex;
   color: #1b2d49;
+  min-height: 100vh;
   .flex-1 {
     flex: 1;
     &-inner-div {
@@ -13,6 +14,14 @@
   .flex-2 {
     flex: 1;
     padding-top: 80px;
+    .nav-arrows-div {
+      display: flex;
+      justify-content: space-between;
+      .fa {
+        // color: white;
+        // background-color: black;
+      }
+    }
   }
 }
 
@@ -47,9 +56,11 @@
 
 .info-document-header {
   display: flex;
-  color: #db353a;
+  //   color: #db353a;
+  color: c4c4c4;
   margin-bottom: 30px;
   margin-top: 40px;
+  align-items: center;
 }
 
 .details-card {
@@ -69,6 +80,10 @@
   }
   .info {
     width: 100%;
+    .img-div {
+      border-radius: 10px;
+      overflow: hidden;
+    }
     p {
       color: #c4c4c4;
       font-size: 12px;
@@ -119,4 +134,39 @@
     font-size: 8px;
     color: #595959;
   }
+}
+
+.document-modal {
+}
+
+.add-user-success-modal {
+  padding: 60px;
+  text-align: center;
+  border-radius: 50px;
+  h1 {
+    color: #24615d;
+    font-size: 60px;
+  }
+  h4 {
+    margin-top: 40px;
+  }
+}
+
+.ok {
+  color: white;
+  padding: 15px 30px;
+  background: linear-gradient(90deg, #db353a 29.47%, #b62428 110.63%);
+  box-shadow: 0px 0px 13px 1px rgba(162, 162, 162, 0.25);
+  border-radius: 10px;
+  margin-top: 40px;
+}
+
+.underline {
+  text-decoration: underline;
+}
+
+.active-info-doc-tab {
+  border-radius: 20px;
+  border: 1px solid #c4c4c4;
+  padding: 10px;
 }

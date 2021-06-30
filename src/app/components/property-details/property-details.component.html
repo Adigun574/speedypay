@@ -19,22 +19,22 @@
                     </div>
                     <h5 class="dropdown-toggle" type="button" data-toggle="dropdown"><i class="fa fa-ellipsis-v"></i></h5>
                     <ul class="dropdown-menu" style="padding:20px">
-                        <li class="cursor-pointer">Delete</li>
+                        <li class="cursor-pointer text-success" (click)="approveForDueDilligence(approveModal)">Proceed</li>
                         <hr>
-                        <li class="cursor-pointer text-success" (click)="approveForDueDilligence()">Proceed</li>
+                        <li class="cursor-pointer text-danger" (click)="rejectProperty(rejectModal)">Decline</li>
                         <hr>
-                        <li class="cursor-pointer text-danger" (click)="rejectProperty()">Decline</li>
+                        <li class="cursor-pointer" (click)="deleteProperty(deleteModal)">Delete</li>
                     </ul>
                 </div>
                 
                 <p class="completion-status">{{propertyDetails?.LevelOfHouseCompleted}} Completed</p>
                 
                 <div class="info-document-header">
-                    <h5 class="mr-4">INFO</h5>
-                    <h5>DOCUMENTS</h5>
+                    <h5 class="mr-4 cursor-pointer" (click)="showInfoTab()" [ngClass]="{'active-info-doc-tab':showInfo}">INFO</h5>
+                    <h5 class="cursor-pointer" (click)="showDocumentTab()" [ngClass]="{'active-info-doc-tab':!showInfo}">DOCUMENTS</h5>
                 </div>
 
-                <div class="details-card">
+                <div class="details-card" *ngIf="showInfo">
                     <div class="row">
                         <div class="col-6">
                             <div class="info">
@@ -65,7 +65,36 @@
                     </div>
                 </div>
 
-                <div class="amenities-div">
+                <div class="details-card" *ngIf="!showInfo">
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="info cursor-pointer" (click)="openDocument(propertyDetails?.BuildingPlanApproval, documentModal)">
+                                <div class="img-div">
+                                    <img [src]="propertyDetails?.BuildingPlanApproval" width="100%">
+                                </div>
+                                <p class="text-center">Building Plan Approval</p>
+                            </div>                            
+                        </div>
+                        <div class="col-4">
+                            <div class="info cursor-pointer" (click)="openDocument(propertyDetails?.SurveyPlan, documentModal)">
+                                <div class="img-div">
+                                    <img [src]="propertyDetails?.SurveyPlan" width="100%">
+                                </div>
+                                <p class="text-center">Survey Plan</p>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="info cursor-pointer" (click)="openDocument(propertyDetails?.TitleDocument, documentModal)">
+                                <div class="img-div">
+                                    <img [src]="propertyDetails?.TitleDocument" width="100%">
+                                </div>
+                                <p class="text-center">Title Document</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- <div class="amenities-div">
                     <p><i class="fa fa-user mr-2"></i> Garage/Parking Lot</p>
                     <p><i class="fa fa-user mr-2"></i> Public Water/Sewer</p>
                 </div>
@@ -73,11 +102,11 @@
                 <div class="amenities-div">
                     <p><i class="fa fa-user mr-2"></i> Central Park</p>
                     <p><i class="fa fa-user mr-2"></i> Central Location</p>
-                </div>
+                </div> -->
 
                 <div class="action-button-div">
-                    <p class="proceed cursor-pointer" (click)="approveForDueDilligence()">PROCEED FOR DUE DILIGENCE <i class="fa fa-thumbs-up"></i></p>
-                    <p class="decline cursor-pointer" (click)="rejectProperty()">DECLINE <i class="fa fa-thumbs-down"></i></p>
+                    <p class="proceed cursor-pointer" (click)="approveForDueDilligence(approveModal)">PROCEED FOR DUE DILIGENCE <i class="fa fa-thumbs-up"></i></p>
+                    <p class="decline cursor-pointer" (click)="rejectProperty(rejectModal)">DECLINE <i class="fa fa-thumbs-down"></i></p>
                 </div>
             </div>
         </div>
@@ -86,6 +115,10 @@
         <div class="flex-2">
             <div style="width:100%; border-radius: 20px; overflow: hidden;">
                 <img [src]="propertyImages[currentImageIndex]" width="100%">
+                <!-- <div class="nav-arrows-div">
+                    <h1><i class="fa fa-arrow-circle-left"></i></h1>
+                    <h1><i class="fa fa-arrow-circle-o-right"></i></h1>
+                </div> -->
             </div>
 
             <div>
@@ -108,12 +141,8 @@
                 </div>
             </div>
 
-        </div>
-        
-    </div>
-
-
-    
+        </div>        
+    </div>   
 
 
 
@@ -130,3 +159,34 @@
         </div>         
     </div>
 </div>
+
+
+<ng-template #documentModal>
+    <div class="document-modal">
+        <img [src]="currentDocumentImgSrc" height="500px">
+    </div>
+</ng-template>
+
+<ng-template #approveModal>
+    <div class="add-user-success-modal">
+        <h1><i class="fa fa-info-circle"></i></h1>
+        <h4>{{approveReturnMessage}}</h4>
+        <p class="ok cursor-pointer" (click)="dismissModal()">Ok</p>
+    </div>
+</ng-template>
+
+<ng-template #rejectModal>
+    <div class="add-user-success-modal">
+        <h1><i class="fa fa-info-circle"></i></h1>
+        <h4>{{rejectReturnMessage}}</h4>
+        <p class="ok cursor-pointer" (click)="dismissModal()">Ok</p>
+    </div>
+</ng-template>
+
+<ng-template #deleteModal>
+    <div class="add-user-success-modal">
+        <h1><i class="fa fa-info-circle"></i></h1>
+        <h4>{{deleteReturnMessage}}</h4>
+        <p class="ok cursor-pointer" (click)="dismissModal()">Ok</p>
+    </div>
+</ng-template>

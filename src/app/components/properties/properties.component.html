@@ -5,7 +5,7 @@
             <div class="col-3">
                 <div class="info-card">
                     <p class="home-p"><i class="fa fa-home home-icon" style=" background-color:#f2f2f2; color:#1b2d49"></i></p>
-                    <h1 class="text-center">{{properties.length}}</h1>
+                    <h1 class="text-center">{{allProperties.length}}</h1>
                     <p class="text-center">Total Listings</p>
                 </div>
             </div>
@@ -19,7 +19,7 @@
             <div class="col-3">
                 <div class="info-card">
                     <p class="home-p"><i class="fa fa-home home-icon" style="background-color:#fff1c1; color:#fca652"></i></p>
-                    <h1 class="text-center">{{pendingApprovalProperties.length}}</h1>
+                    <h1 class="text-center">{{properties.length}}</h1>
                     <p class="text-center">Pending Listings</p>
                 </div>
             </div>
@@ -43,14 +43,6 @@
                     <p class="xls mr-2 cursor-pointer" (click)="exportAsXLSX()">.xls</p>
                     <p class="xls cursor-pointer" (click)="exportAsXLSX()">.csv</p>
                 </div>
-                <!-- <div class="sort-row">
-                    <p><i class="fa fa-sort"></i></p>
-                    <select (change)="sortUsers()" [(ngModel)]="sortUsersValue">
-                        <option value="null">Sort By</option>
-                        <option value="name">Name</option>
-                        <option value="role">Role</option>
-                    </select>
-                </div>  -->
                 <div class="sort-row">
                     <p><i class="fa fa-filter"></i></p>
                     <select [(ngModel)]="filterPropertiesValue">
@@ -69,32 +61,30 @@
                 <th></th>
                 <th>Property Listing</th>
                 <th>Status</th>
-                <th>Applicant Name</th>
+                <th>State</th>
                 <th>Email</th>
-                <th>Phone Number</th>
-                <th>SAF Account</th>
+                <th>Account Status</th>
                 <th>Date</th>
                 <th></th>
             </tr>
             <tr *ngFor="let property of filteredProperties | paginate: { itemsPerPage: 20, currentPage: p }; index as i">
                 <td>{{i+1}}</td>
-                <td>{{property.PropertyTitle}}</td>
-                <td>{{property.HouseStatus}}</td>
-                <td>--</td>
-                <td>{{property.CreatedBy}}</td>
-                <td>--</td>
-                <td>--</td>
-                <td>{{property.CreatedDate.split('T')[0]}}</td>
+                <td>{{property.propertyTitle}}</td>
+                <td>{{property.houseStatus}}</td>
+                <td>{{property.state | titlecase}}</td>
+                <td>{{property.createdBy}}</td>
+                <td>{{property.accountStatus}}</td>
+                <td>{{property.createdDate.split('T')[0]}}</td>
                 <td>
                     <h6 style="color:#db353a" class="dropdown-toggle" type="button" data-toggle="dropdown"><i class="fa fa-ellipsis-v"></i></h6>
                     <ul class="dropdown-menu" style="padding:20px">
-                        <li class="cursor-pointer" (click)="goToPropertyDetails(property.Id)">View Details</li>
+                        <li class="cursor-pointer" (click)="goToPropertyDetails(property.id)">View Details</li>
                         <hr>
-                        <li class="cursor-pointer">Delete</li>
+                        <li class="cursor-pointer" (click)="deleteProperty(property.id, deleteModal)">Delete</li>
                         <hr>
-                        <li class="cursor-pointer" style="background-color: #379c35; color:white; padding:5px; border-radius: 5px;" (click)="approveForDueDilligence(property.Id)">Approve</li>
+                        <li class="cursor-pointer" style="background-color: #379c35; color:white; padding:5px; border-radius: 5px;" (click)="approveForDueDilligence(property.id, approveModal)">Approve</li>
                         <hr>
-                        <li class="cursor-pointer" style="background-color: #db353a; color:white; padding:5px; border-radius: 5px;" (click)="rejectProperty(property.Id)">Decline</li>
+                        <li class="cursor-pointer" style="background-color: #db353a; color:white; padding:5px; border-radius: 5px;" (click)="rejectProperty(property.id, rejectModal)">Decline</li>
                     </ul>
                 </td>
             </tr>
@@ -109,3 +99,28 @@
     </div>
 
 </div>
+
+
+<ng-template #approveModal>
+    <div class="add-user-success-modal">
+        <h1><i class="fa fa-info-circle"></i></h1>
+        <h4>{{approveReturnMessage}}</h4>
+        <p class="ok cursor-pointer" (click)="dismissModal()">Ok</p>
+    </div>
+</ng-template>
+
+<ng-template #rejectModal>
+    <div class="add-user-success-modal">
+        <h1><i class="fa fa-info-circle"></i></h1>
+        <h4>{{rejectReturnMessage}}</h4>
+        <p class="ok cursor-pointer" (click)="dismissModal()">Ok</p>
+    </div>
+</ng-template>
+
+<ng-template #deleteModal>
+    <div class="add-user-success-modal">
+        <h1><i class="fa fa-info-circle"></i></h1>
+        <h4>{{deleteReturnMessage}}</h4>
+        <p class="ok cursor-pointer" (click)="dismissModal()">Ok</p>
+    </div>
+</ng-template>
