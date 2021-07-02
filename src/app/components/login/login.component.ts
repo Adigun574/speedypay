@@ -41,7 +41,6 @@ export class LoginComponent implements OnInit {
     this.loginFailed = false
     this.authService.login(this.loginForm.value.username, this.loginForm.value.password).subscribe((data:any)=>{
       this.loading = false
-      console.log(data)
       if(data.refreshToken){
         Swal.fire({
           icon: 'success',
@@ -66,26 +65,33 @@ export class LoginComponent implements OnInit {
   }
 
   verifyToken(){
-    this.router.navigateByUrl('/main/properties')
     this.modalService.dismissAll()
-    //FIX THIS LATER
-    return
-    // if(!this.mtoken) return
-    // this.loading = true
-    // let obj = {
-    //   username:'adigunmi',
-    //   otp:this.mtoken
-    // }
-    // console.log(obj)
-    // this.authService.verifyToken(obj).subscribe(data=>{
-    //   this.loading = false
-    //     this.router.navigateByUrl('/main/users')
-    //   console.log(data)
-    // },
-    //   err=>{
-    //     this.loading = false
-    //     console.log(err)
-    //   })
+    if(!this.mtoken) return
+    this.loading = true
+    let obj = {
+      username:this.loginForm.value.username,
+      otp:this.mtoken
+    }
+    this.authService.verifyToken(obj).subscribe((data:any)=>{
+      this.loading = false
+      this.mtoken = ''
+      if(data.isSuccess){
+        this.router.navigateByUrl('/main/properties')
+        return
+      }
+      Swal.fire({
+        icon: 'error',
+        title: 'Login failed',
+      })
+    },
+      err=>{
+        this.loading = false
+        Swal.fire({
+          icon: 'error',
+          title: 'Login failed',
+        })
+        console.log(err)
+      })
   }
 
 

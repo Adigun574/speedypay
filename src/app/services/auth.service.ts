@@ -105,7 +105,7 @@ export class AuthService implements OnDestroy {
       .post<LoginResult>(`${this.apiUrl}Authentication/RefreshToken`, { refreshToken }, opts)
       .pipe(
         map((x) => {
-          console.log(x)
+          // console.log(x)
           // console.log('refreshing token 2')
           localStorage.setItem('nib_officer_access_token', x.accessToken);
           localStorage.setItem('nib_officer_refresh_token', x.refreshToken);

@@ -23,7 +23,7 @@ export class PropertiesComponent implements OnInit {
   filteredProperties = []
   allProperties = []
   loading:boolean = false
-  // pendingApprovalProperties = []
+  pendingApprovalProperties = []
   // pendingDueDilligenceProperties = []
   approveReturnMessage = ''
   rejectReturnMessage = ''
@@ -40,7 +40,7 @@ export class PropertiesComponent implements OnInit {
 
   ngOnInit(): void {
     this.getProperties()
-    // this.getPendingApprovalProperties()
+    this.getPendingApprovalProperties()
     this.getPendingDueDilligenceProperties()
   }
 
@@ -55,7 +55,6 @@ export class PropertiesComponent implements OnInit {
   getProperties(){
     this.propertyService.getAllProperties().subscribe((data:any)=>{
       this.allProperties = data
-      console.log(this.allProperties)
     },
       err=>{
         console.log(err)
@@ -63,20 +62,18 @@ export class PropertiesComponent implements OnInit {
       })
   }
 
-  // getPendingApprovalProperties(){
-  //   this.propertyService.getPendingApprovalProperties().subscribe((data:any)=>{
-  //     console.log(data)
-  //     this.pendingApprovalProperties = data
-  //   },
-  //     err=>{
-  //       console.log(err)
-  //     })
-  // }
+  getPendingApprovalProperties(){
+    this.propertyService.getPendingApprovalProperties().subscribe((data:any)=>{
+      this.pendingApprovalProperties = data
+    },
+      err=>{
+        console.log(err)
+      })
+  }
 
   getPendingDueDilligenceProperties(){
     this.loading = true
     this.propertyService.getPendingDueDilligenceProperties().subscribe((data:any)=>{
-      console.log(data)
       this.properties = data
       this.filteredProperties = [...this.properties]
       this.loading = false
@@ -95,7 +92,6 @@ export class PropertiesComponent implements OnInit {
       passedDueDeligenceBy: "string",
       passedDueDate: "2021-06-22T21:12:19.462Z"
     }
-    console.log(obj)
     this.loading = true
     this.propertyService.approvePropertyForDueDilligence(obj).subscribe((data:any)=>{
       console.log(data)
@@ -124,10 +120,8 @@ export class PropertiesComponent implements OnInit {
       rejectedReason: "string",
       rejectedStatus: true
     }
-    console.log(obj)
     this.loading = true
     this.propertyService.rejectProperty(obj).subscribe((data:any)=>{
-      console.log(data)
       this.getPendingDueDilligenceProperties()
       this.rejectReturnMessage = data?.message
       this.open(modal)
@@ -149,7 +143,6 @@ export class PropertiesComponent implements OnInit {
     let obj = {
       id
     }
-    console.log(obj)
     this.loading = true
     this.propertyService.deleteProperty(obj).subscribe((data:any)=>{
       console.log(data)
@@ -205,12 +198,5 @@ export class PropertiesComponent implements OnInit {
       this.filteredProperties = this.properties.filter(x=>x.propertyTitle.toLowerCase().includes(this.searchKey.toLowerCase()))
     }
   }
-
-
-
-
-
-
-
-
+  
 }
