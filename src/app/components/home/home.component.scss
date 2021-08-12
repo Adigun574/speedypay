@@ -8,17 +8,11 @@
 .top-nav {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 25px;
+  margin-bottom: 30px;
   h3 {
     flex: 1;
     color: #525350;
   }
-  //   input {
-  //     background-color: #f2f3f3;
-  //     border-radius: 20px;
-  //     flex: 3;
-  //     border: none;
-  //   }
   div {
     flex: 3;
     display: flex;
@@ -38,7 +32,6 @@
       background-color: #09b24b;
       color: white;
       border-radius: 20px;
-      //   padding: 5px;
       height: 35px;
       text-align: center;
       position: relative;
@@ -50,7 +43,6 @@
 .spots-slider {
   display: flex;
   overflow-x: scroll;
-  //   width: 150%;
 }
 .spot {
   background-color: #cdefdc;
@@ -64,13 +56,12 @@
   align-items: center;
   p {
     margin-top: 10px;
-    // font-size: 14px;
   }
 }
 .popular {
   display: flex;
   justify-content: space-between;
-  margin-top: 20px;
+  margin-top: 30px;
   align-items: flex-end;
   .text {
     font-weight: bold;
@@ -86,7 +77,6 @@
 .food-slider {
   display: flex;
   overflow-x: scroll;
-  //   width: 150%;
   .food {
     background-image: url("../../../assets/images/pexels-monicore-1391487.jpg");
     height: 150px;
@@ -104,25 +94,18 @@
       position: absolute;
       bottom: 0;
       font-weight: lighter;
-      //   color: red !important;
       .title {
         font-size: 14px;
-        // position: absolute;
-        // bottom: 50px;
         margin-bottom: 0 !important;
       }
       .description {
         font-size: 12px;
-        // position: absolute;
-        // bottom: 20px;
         margin-bottom: 0 !important;
       }
       .amount-rating {
         font-size: 12px;
         display: flex;
         justify-content: space-between;
-        // position: absolute;
-        // bottom: 0;
       }
     }
   }
